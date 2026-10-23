@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pinned</title>
+  <link rel="icon" href="icon32.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="board-page">
+  <main class="wrap">
+    <h1>Pinned</h1>
+    <p id="setup" class="msg err" hidden>Setup needed: open config.js and paste in your Supabase URL and anon key.</p>
+    <p id="boot" class="state">Loading…</p>
+
+    <!-- Logged out -->
+    <section id="auth" class="card" hidden>
+      <h2 id="authTitle">Log in</h2>
+      <form id="authForm" novalidate>
+        <label class="field"><span>Email</span><input id="email" type="email" autocomplete="email" required></label>
+        <label class="field" id="pwField"><span>Password</span><input id="password" type="password" autocomplete="current-password" minlength="8" required></label>
+        <p id="authMsg" class="msg" role="alert"></p>
+        <button id="authBtn" class="block" type="submit">Log in</button>
+      </form>
+      <div class="swap">
+        <button type="button" class="link" id="toSignup">Create an account</button>
+        <button type="button" class="link" id="toLogin" hidden>I already have an account</button>
+        <button type="button" class="link" id="toForgot">Forgot password?</button>
+      </div>
+    </section>
+
+    <!-- Logged in -->
+    <section id="app" hidden>
+      <div class="bar">
+        <span class="who" id="who"></span>
+        <button id="logout" class="block plain" type="button">Log out</button>
+      </div>
+      <form id="addForm" class="add">
+        <input id="newText" placeholder="What needs doing?" maxlength="200" aria-label="New task" required>
+        <button id="addBtn" class="block" type="submit">Pin it</button>
+      </form>
+      <p id="appMsg" class="msg" role="alert"></p>
+      <p id="listState" class="state"></p>
+      <ul id="tasks" class="tasks"></ul>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
