@@ -56,10 +56,10 @@ export class Toast {
   constructor(host) { this.host = host; this.timer = null; }
   show(message, actionLabel, onAction) {
     clearTimeout(this.timer);
-    this.host.replaceChildren(
+    this.host.replaceChildren(...[
       el('span', { text: message }),
       actionLabel && el('button', { type: 'button', text: actionLabel, onclick: () => { onAction(); this.hide(); } }),
-    );
+    ].filter(Boolean));
     this.host.hidden = false;
     this.timer = setTimeout(() => this.hide(), 6000);
   }
