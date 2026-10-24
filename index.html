@@ -3,18 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pinned</title>
+  <title>Pinned board</title>
   <link rel="icon" href="icon32.png">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="app.css">
 </head>
 <body class="board-page">
-  <main class="wrap">
+  <main class="wrap" id="gate">
     <h1>Pinned</h1>
     <p id="setup" class="msg err" hidden>Setup needed: open config.js and paste in your Supabase URL and anon key.</p>
     <p id="boot" class="state">Loading…</p>
-
-    <!-- Logged out -->
     <section id="auth" class="card" hidden>
       <h2 id="authTitle">Log in</h2>
       <form id="authForm" novalidate>
@@ -29,25 +27,95 @@
         <button type="button" class="link" id="toForgot">Forgot password?</button>
       </div>
     </section>
-
-    <!-- Logged in -->
-    <section id="app" hidden>
-      <div class="bar">
-        <span class="who" id="who"></span>
-        <button id="logout" class="block plain" type="button">Log out</button>
-      </div>
-      <form id="addForm" class="add">
-        <input id="newText" placeholder="What needs doing?" maxlength="200" aria-label="New task" required>
-        <button id="addBtn" class="block" type="submit">Pin it</button>
-      </form>
-      <p id="appMsg" class="msg" role="alert"></p>
-      <p id="listState" class="state"></p>
-      <ul id="tasks" class="tasks"></ul>
-    </section>
   </main>
 
+  <div id="appRoot" hidden>
+  <header class="top">
+    <div>
+      <h1>What’s due<br>next</h1>
+      <svg class="squiggle" viewBox="0 0 300 18" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 11 C 22 2, 34 2, 52 11 S 84 18, 104 9 S 140 2, 160 10 S 196 17, 218 8 S 262 4, 297 12"/>
+      </svg>
+      <p id="lede" class="lede"></p>
+    </div>
+    <div class="tools">
+      <span class="who" id="who"></span>
+      <button id="logout" class="block plain" type="button">Log out</button>
+      <button id="notify" class="block plain" type="button">Turn on reminders</button>
+      <button id="add" class="block" type="button">Pin a new note</button>
+      <button id="export" class="block plain" type="button">Save a backup</button>
+      <button id="import" class="block plain" type="button">Load a backup</button>
+      <input id="importFile" type="file" accept="application/json,.json" hidden>
+    </div>
+  </header>
+
+  <nav id="filters" class="filters" aria-label="Filter notes"></nav>
+
+  <section class="front">
+    <div class="main">
+      <div id="hero"></div>
+      <section id="board" class="board" aria-label="All notes"></section>
+    </div>
+    <aside class="side">
+      <section id="cal" class="paper-card cal-card" aria-label="Month calendar"></section>
+      <section id="todo" class="paper-card todo-card" aria-label="Steps to tick off first"></section>
+    </aside>
+  </section>
+
+  <details id="pastWrap" class="past-wrap" hidden>
+    <summary id="pastTitle"></summary>
+    <div id="past" class="board"></div>
+  </details>
+
+  <dialog id="editor" class="memo" aria-labelledby="editorTitle">
+    <form id="form" class="form-grid" novalidate>
+      <h2 id="editorTitle">New note</h2>
+      <div class="kinds" role="radiogroup" aria-label="Type">
+        <label><input type="radio" name="kind" value="Exam" checked><span>Exam</span></label>
+        <label><input type="radio" name="kind" value="Assignment"><span>Assignment</span></label>
+      </div>
+      <div class="two">
+        <label class="field"><span>Course</span><input name="course" list="courseList" placeholder="ELEC1605" autocomplete="off"></label>
+        <label class="field"><span>Title</span><input name="title" placeholder="Final exam"></label>
+      </div>
+      <div class="two">
+        <label class="field"><span>Due</span><input name="due" type="datetime-local"></label>
+        <label class="field"><span id="whereLabel">Where</span><input name="where" id="whereInput" placeholder="Room, building or link"></label>
+      </div>
+      <div class="two">
+        <label class="field"><span>Worth (% of grade)</span><input name="weighting" type="number" min="0" max="100" inputmode="numeric"></label>
+        <label class="field" id="durationField"><span>Length (minutes)</span><input name="durationMins" type="number" min="0" inputmode="numeric" placeholder="120"></label>
+      </div>
+      <fieldset>
+        <legend>Note colour</legend>
+        <div class="swatches" id="swatches"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Steps to tick off</legend>
+        <div id="stepRows"></div>
+        <button type="button" id="addStep" class="link">Add a step</button>
+      </fieldset>
+      <label class="field"><span>Notes</span><textarea name="notes" placeholder="Allowed materials, topics, things to remember"></textarea></label>
+      <div>
+        <button type="button" class="link" id="addPhotos">Add photos</button>
+        <input type="file" id="photoInput" accept="image/*" multiple hidden>
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+      <p id="warn" class="warn" role="status"></p>
+      <p id="err" class="err" role="alert"></p>
+      <div class="form-actions">
+        <button type="button" id="cancel" class="block plain">Cancel</button>
+        <button type="submit" class="block">Save note</button>
+      </div>
+      <datalist id="courseList"></datalist>
+    </form>
+  </dialog>
+
+  <dialog id="lightbox" class="lightbox"><img id="lightImg" alt="Attached photo"></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
   <script src="config.js"></script>
-  <script src="app.js"></script>
+  <script type="module" src="board.js"></script>
 </body>
 </html>

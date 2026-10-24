@@ -22,3 +22,5 @@
 .task .tick { flex: none; }
 .state { font-family: var(--hand); text-align: center; padding: 1rem 0; }
 .swap { margin-top: .5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+#gate { padding-top: 2rem; }
+.tools .who { font-family: var(--hand); align-self: center; overflow-wrap: anywhere; }
